@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<!--mapper为根元素，namespace指定了命名空间-->
+<mapper namespace="mapper.UserMapper">
+
+    <!-- 添加用户 parameterType：输入 参数的类型，User对象 包括 username,birthday,sex,address
+		#{}接收pojo数据，可以使用OGNL解析出pojo的属性值 #{username}表示从parameterType中获取pojo的属性值 selectKey：用于进行主键返回，定义了获取主键值的sql
+		order：设置selectKey中sql执行的顺序，相对于insert语句来说 keyProperty：将主键值设置到哪个属性 resultType：select
+		LAST_INSERT_ID()的结果 类型 -->
+    <insert id="insertUser" parameterType="po.User">
+        <selectKey keyProperty="id" order="BEFORE" resultType="int">
+            select LAST_INSERT_ID()
+        </selectKey>
+
+        INSERT INTO T_USER(username,password,address,sex)
+        VALUES(#{username},#{password},#{address},#{sex})
+    </insert>
+
+    <delete id="deleteById">
+        delete from t_user where id = #{id}
+    </delete>
+
+    <!-- 用户更新 要求：传入的user对象中包括 id属性值 -->
+    <update id="updateById" parameterType="po.User">
+        update t_user set
+        username = #{username}, password = #{password}, address = #{address}, sex = #{sex}
+        where id = #{id}
+    </update>
+
+<!--    查-->
+    <select id="findUserById" parameterType="int" resultType="po.User">
+        SELECT * FROM t_user WHERE id = #{id}
+    </select>
+
+    <select id="findUserByUsername" resultType="po.User">
+            select * from t_user where username = #{username}
+    </select>
+
+    <!-- 根据用户名称查询用户信息，可能返回多条 ${}：表示sql的拼接，通过${}接收参数，
+	将参数的内容不加任何修饰拼接在sql中。 -->
+    <select id="findUserListByUsername" parameterType="String" resultType="po.User">
+        select * from t_user where username like '%${value}%'
+    </select>
+
+<!--    查询全部-->
+    <select id="findUserAll" resultType="po.User">
+        select * from t_user
+    </select>
+</mapper>

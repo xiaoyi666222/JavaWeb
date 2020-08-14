@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<!-- 这个XML文件其实就相当于我们三层架构中的DAO层的实现类xxxDaoImpl,如果拿它跟具有相同功能的 JDBC 代码进行对比，你会立即发现省掉了将近 95% 的代码。
+    也就是说,有了这个配置文件,至少之前原始JDBC中经常出现的Connection,PreparedStatement,ResultSet这些接口不需要你再创建了
+    当然要编写这个文件,需要对<mapper>标签中出现的属性和标签都要熟悉,不过没有必要去一一熟悉,用到什么我们再去查询就行了
+-->
+<!-- 为这个mapper指定一个唯一的namespace，namespace的值习惯上设置成包名+sql映射文件名，这样就能够保证namespace的值是唯一的
+例如namespace="om.yingside.mapper.UserMapper"就是com.yingside.mapper(包名)+UserMapper(UserMapper.xml文件去除后缀)
+ -->
+<mapper namespace="mapper.UserMapper">
+    <!--
+       根据 id 查询 user 表中的数据
+       id:唯一标识符，此文件中的id值不能重复,简单来说,就是DAO层中的方法名
+       resultType:返回值类型，一条数据库记录也就对应实体类的一个对象,注意现在要跟上全名(包名+类名)
+       parameterType:参数类型，也就是查询条件的类型
+       #{}表示一个占位符即?,在使用时不需要关心参数值的类型，mybatis会自动进行java类型和jdbc类型的转换。
+     -->
+    <select id="getUser" parameterType="int" resultType="bean.User">
+        select * from t_user where id=#{id}
+    </select>
+</mapper>
