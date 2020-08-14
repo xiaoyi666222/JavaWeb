@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.common.mapper.UserMapper">
+
+    <!-- resultMap标签:映射实体与表
+         type属性：表示实体全路径名
+         id属性：为实体与表的映射取一个任意的唯一的名字
+    -->
+    <resultMap type="com.common.entity.User" id="userMap">
+        <!-- id标签:映射主键属性
+             result标签：映射非主键属性
+             property属性:实体的属性名
+             column属性：表的字段名
+        -->
+        <id property="id" column="id"/>
+        <result property="username" column="username"/>
+        <result property="password" column="password"/>
+    </resultMap>
+
+
+    <select id="findByUsername" parameterType="Map" resultType="com.common.entity.User">
+        select * from user_task04 where username = #{username} and password = #{password};
+    </select>
+
+    <select id="findById" parameterType="int" resultMap="userMap">
+        select * from user_task04 where id = #{id};
+    </select>
+
+    <!-- 定义 SQL 语句，其中 id 需要和接口中的方法名一致 -->
+    <!-- useGeneratedKeys：实现自动生成主键 -->
+    <!-- keyProperty： 唯一标记一个属性 -->
+    <!-- parameterType 指明查询时使用的参数类型，resultType 指明查询返回的结果集类型 -->
+    <insert id="insertUser" useGeneratedKeys="true" keyProperty="id" parameterType="com.common.entity.User">
+        insert into user_task04 (username,password) values
+        (#{username},#{password});
+    </insert>
+
+    <!-- 如未为 Java Bean 起类别名，resultType="com.shiyanlou.mybatis.model.User" -->
+
+    <!-- 使用resultType时，一定要保证，你属性名与字段名相同；如果不相同，就使用resultMap -->
+
+    <select id="findAll" resultMap="userMap">
+        select * from user_task04;
+    </select>
+
+</mapper>
